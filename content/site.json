@@ -1,0 +1,28 @@
+{
+  "name": "2027第二十四届中国文化产业新年论坛",
+  "nameShort": "中国文化产业新年论坛",
+  "nameEn": "The 24th Forum on International Cultural Industries, 2027, China",
+  "theme": "新格局：文化发展的多元共生与全球对话",
+  "date": "2027.01.09 – 01.10",
+  "dateFull": "2027 年 1 月 9 日 – 10 日",
+  "place": "中国 · 北京",
+  "host": "北京大学",
+  "organizer": "北京大学文化产业研究院",
+  "edition": "第二十四届",
+  "nav": [
+    { "label": "论坛简介", "href": "about.html" },
+    { "label": "最新消息", "href": "news.html" },
+    { "label": "简要日程", "href": "agenda.html" },
+    { "label": "论坛板块", "href": "program.html" },
+    { "label": "演讲集萃", "href": "speeches.html" },
+    { "label": "出版物", "href": "publication.html" },
+    { "label": "论坛风采", "href": "gallery.html" },
+    { "label": "历届论坛", "href": "history.html" },
+    { "label": "参会服务", "href": "service.html" }
+  ],
+  "contact": {
+    "secretariat": "中国文化产业新年论坛组委会",
+    "address": "北京市海淀区颐和园路 5 号 北京大学",
+    "channel": "会前随议程一并公布"
+  }
+}
