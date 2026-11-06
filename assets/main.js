@@ -102,7 +102,7 @@
   /* ---------- 入场动画 ---------- */
   if (!reduceMotion && 'IntersectionObserver' in window) {
     var revealTargets = document.querySelectorAll(
-      '.section-head, .about-body, .about-aside, .news-feature, .news-list, ' +
+      '.section-head, .news-feature, .news-list, ' +
       '.agenda-day, .prog-card, .speaker, .pub-card, .ph-photo, .year-grid, ' +
       '.service-card, .contact-band'
     );
