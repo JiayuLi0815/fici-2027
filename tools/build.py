@@ -342,7 +342,7 @@ def build_index():
     hero = """
 <section class="hero" aria-label="主视觉">
   <div class="hero-poster-wrap">
-    <img class="hero-poster" src="assets/hero-poster.jpg" alt="2027第二十四届中国文化产业新年论坛主视觉海报" width="2401" height="1032">
+    <img class="hero-poster" src="assets/hero-poster.jpg" alt="2027第二十四届中国文化产业新年论坛主视觉海报" width="2401" height="1030">
   </div>
   <div class="hero-bar" aria-hidden="true"></div>
 </section>"""
