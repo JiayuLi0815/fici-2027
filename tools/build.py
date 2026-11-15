@@ -24,7 +24,6 @@ def load(n):
 SITE = load("site.json")
 PROGRAMS = load("programs.json")
 AGENDA = load("agenda.json")
-NEWS = load("news.json")
 PUBLICATIONS = load("publications.json")
 GALLERY = load("gallery.json")
 DOCUMENTS = load("documents.json")
@@ -260,33 +259,6 @@ def build_index():
 </section>""" % (head("Forum Sessions", "论坛板块"),
                 " is-even" if len(PROGRAMS) % 3 else "", "".join(cards))
 
-    news_cards = []
-    for n in NEWS[:3]:
-        news_cards.append("""
-      <a class="news-card" href="news.html">
-        <div class="ph-media news-thumb"></div>
-        <div class="news-card-body">
-          <div class="news-meta"><time>%s</time></div>
-          <h3>%s</h3>
-          <p>%s</p>
-        </div>
-      </a>""" % (esc(n["date"]), esc(n["title"]), esc(n["summary"])))
-    news = """
-<section class="section" id="news">
-  <div class="container">
-    <div class="section-head section-head-row">
-      <div>
-        <p class="eyebrow">Latest News</p>
-        <h2 class="section-title">最新消息</h2>
-        <span class="title-rule"><i></i><i></i><i></i></span>
-      </div>
-      <a class="more-link" href="news.html">全部消息<span aria-hidden="true">→</span></a>
-    </div>
-    <div class="news-grid">%s
-    </div>
-  </div>
-</section>""" % "".join(news_cards)
-
     photos = [shot(g) for g in GALLERY[:4]]
     gallery = """
 <section class="section section-alt" id="gallery">
@@ -353,35 +325,10 @@ def build_index():
           % (SITE["name"], SITE["theme"], SITE["dateFull"], SITE["place"],
              SITE["host"], SITE["organizer"]),
           "index.html",
-          hero + about + program + news + gallery + service,
+          hero + about + program + gallery + service,
           is_home=True)
 
 
-# ------------------------------------------------------------------ 最新消息
-
-def build_news():
-    rows = []
-    for n in NEWS:
-        rows.append("""
-      <li class="news-row">
-        <div class="news-row-date"><b>%s</b><span>%s</span></div>
-        <div class="news-row-body">
-          <h3>%s</h3>
-          <p>%s</p>
-        </div>
-      </li>""" % (esc(n["date"][5:].replace("-", ".")), esc(n["date"][:4]),
-                  esc(n["title"]), esc(n["summary"])))
-    body = page_hero('<a href="index.html">首页</a><span>/</span>最新消息',
-                     "Latest News", "最新消息") + """
-<section class="section">
-  <div class="container">
-    <ul class="news-rows">%s
-    </ul>
-  </div>
-</section>""" % "".join(rows)
-    shell("news.html", "最新消息 | %s" % SITE["name"],
-          "2027第二十四届中国文化产业新年论坛最新公告、学术动态与媒体报道。",
-          "news.html", body)
 
 
 # ------------------------------------------------------------------ 简要日程
@@ -788,7 +735,6 @@ def build_service():
 
 def main():
     build_index()
-    build_news()
     build_agenda()
     build_program()
     for p in PROGRAMS:
