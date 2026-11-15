@@ -70,7 +70,7 @@
     if (id) linkMap[id] = a;
   });
 
-  if (sections.length) {
+  if (sections.length && document.body.classList.contains('is-sub')) {
     var currentId = '';
     var setActive = function (id) {
       if (id === currentId) return;
@@ -104,6 +104,8 @@
     var revealTargets = document.querySelectorAll(
       '.section-head, .news-feature, .news-list, ' +
       '.agenda-day, .prog-card, .speaker, .pub-card, .ph-photo, .year-grid, ' +
+      '.phase-card, .mile-card, .iter-card, .mod-card, .layer-card, ' +
+      '.term-block, .arch-card, .table-wrap, ' +
       '.service-card, .contact-band'
     );
 

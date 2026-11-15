@@ -1,24 +1,90 @@
-[
-  { "edition": "第二十四届", "year": "2027", "status": "current", "link": "" },
-  { "edition": "第二十一届", "year": "2024", "status": "", "link": "http://www.fici.org.cn/fici21/" },
-  { "edition": "第二十届", "year": "2023", "status": "", "link": "http://www.fici.org.cn/twentieth/" },
-  { "edition": "第十九届", "year": "2022", "status": "", "link": "http://www.fici.org.cn/nineteenth/" },
-  { "edition": "第十八届", "year": "2021", "status": "", "link": "http://www.fici.org.cn/eighteenth/" },
-  { "edition": "第十七届", "year": "2020", "status": "", "link": "http://www.fici.org.cn/seventeenth/" },
-  { "edition": "第十六届", "year": "2019", "status": "", "link": "http://www.fici.org.cn/sixteenth/" },
-  { "edition": "第十五届", "year": "2018", "status": "", "link": "http://www.fici.org.cn/fifteenth/" },
-  { "edition": "第十四届", "year": "2017", "status": "", "link": "http://www.fici.org.cn/fourteenth/" },
-  { "edition": "第十三届", "year": "2016", "status": "", "link": "http://www.fici.org.cn/thirteenth/" },
-  { "edition": "第十二届", "year": "2015", "status": "", "link": "http://www.fici.org.cn/twelfth/" },
-  { "edition": "第十一届", "year": "2014", "status": "", "link": "http://www.fici.org.cn/eleventh/" },
-  { "edition": "第十届", "year": "2013", "status": "", "link": "http://www.fici.org.cn/tenth/" },
-  { "edition": "第九届", "year": "", "status": "", "link": "http://www.fici.org.cn/ninth/Index.html" },
-  { "edition": "第八届", "year": "", "status": "", "link": "http://www.fici.org.cn/eighth/Index.html" },
-  { "edition": "第七届", "year": "", "status": "", "link": "http://www.fici.org.cn/seventh/Index.html" },
-  { "edition": "第六届", "year": "", "status": "", "link": "http://fici2009.fici.org.cn/fici2009/" },
-  { "edition": "第五届", "year": "", "status": "", "link": "http://fici2009.fici.org.cn/fici2008/" },
-  { "edition": "第四届", "year": "", "status": "", "link": "http://www.fici.org.cn/fici21/forum/6682.html" },
-  { "edition": "第三届", "year": "", "status": "", "link": "http://www.fici.org.cn/fici21/forum/6681.html" },
-  { "edition": "第二届", "year": "", "status": "", "link": "http://www.fici.org.cn/fici21/forum/6680.html" },
-  { "edition": "首届", "year": "", "status": "", "link": "http://www.fici.org.cn/fici21/forum/6679.html" }
-]
+{
+  "lead": "二十三届论坛按年推进，记录了中国文化产业从确立合法性、成为战略性支柱，到提出建设文化强国的过程。下表据历届公开主题整理，点击届次可前往该届专题页。",
+  "note": "第二十四届（2027）为本届论坛。主题与时间为历届公开信息，第二十二届、第二十三届暂无独立专题页。",
+  "stages": [
+    {
+      "id": "I",
+      "no": "Phase I",
+      "label": "一阶段",
+      "name": "体制改革试点期：确立合法性",
+      "range": "第一届—第九届（2003—2012）",
+      "desc": "这一时期的文化产业还在争取学理基础与政策合法性，议题偏宏观：先说明文化产业是什么、能不能做，再讨论怎么做，最后讨论做到什么位置。",
+      "keywords": ["多维视角", "竞争力", "区域", "战略", "软实力", "文化立国", "新十年"]
+    },
+    {
+      "id": "II",
+      "no": "Phase II",
+      "label": "二阶段",
+      "name": "深化改革期：产业融合与小康",
+      "range": "第十届—第二十届（2013—2023）",
+      "desc": "议题从产业本身转向产业融合，从总量增长转向结构升级与价值认同，产业融合、城市文创、文化小康三条线并行。",
+      "keywords": ["改革红利", "产业融合", "文创+", "文化小康", "文化基因", "文化自信"]
+    },
+    {
+      "id": "III",
+      "no": "Phase III",
+      "label": "三阶段",
+      "name": "文化强国新阶段：智能与文明",
+      "range": "第二十一届—第二十三届（2024—2026）",
+      "desc": "议题开始讨论文明形态，AI 从工具变成生产主体，论坛的讨论重心也从产业转到了文明。",
+      "keywords": ["中国式现代化", "中华民族现代文明", "新高峰", "智能与文化"]
+    }
+  ],
+  "editions": [
+    {"edition": "第一届", "date": "2003.12.20", "theme": "多维视角下的中国文化产业", "stage": "I", "link": "http://www.fici.org.cn/fici21/forum/6679.html"},
+    {"edition": "第二届", "date": "2005.01.08–09", "theme": "文化产业竞争力：政府、企业和学界的永恒主题", "stage": "I", "link": "http://www.fici.org.cn/fici21/forum/6680.html"},
+    {"edition": "第三届", "date": "2006.01.07–08", "theme": "和谐社会与区域文化产业", "stage": "I", "link": "http://www.fici.org.cn/fici21/forum/6681.html"},
+    {"edition": "第四届", "date": "2007.01.06–07", "theme": "文化产业战略与发展模式创新", "stage": "I", "link": "http://www.fici.org.cn/fici21/forum/6682.html"},
+    {"edition": "第五届", "date": "2008.01.05–06", "theme": "创意时代的文化创新与软实力建设", "stage": "I", "link": "http://fici2009.fici.org.cn/fici2008/"},
+    {"edition": "第六届", "date": "2009.01.10–11", "theme": "世界经济形势与中国文化产业机遇", "stage": "I", "link": "http://fici2009.fici.org.cn/fici2009/"},
+    {"edition": "第七届", "date": "2010.01.09–10", "theme": "全球视野下的产业融合与文化振兴", "stage": "I", "link": "http://www.fici.org.cn/seventh/Index.html"},
+    {"edition": "第八届", "date": "2011.01.08–09", "theme": "面向 2020：中国文化产业新十年", "stage": "I", "link": "http://www.fici.org.cn/eighth/Index.html"},
+    {"edition": "第九届", "date": "2012.01.07–08", "theme": "文化立国：我国文化发展新战略", "stage": "I", "link": "http://www.fici.org.cn/ninth/Index.html"},
+    {"edition": "第十届", "date": "2013.01.05–06", "theme": "文化创新战略：创意与科技", "stage": "II", "link": "http://www.fici.org.cn/tenth/"},
+    {"edition": "第十一届", "date": "2014.01.11–12", "theme": "文化的力量：文化市场与改革红利", "stage": "II", "link": "http://www.fici.org.cn/eleventh/"},
+    {"edition": "成都峰会", "date": "2014.10.11", "theme": "文化与生活：社会设计与公共创意", "stage": "summit", "link": ""},
+    {"edition": "第十二届", "date": "2015.01.10", "theme": "文化战略与产业融合", "stage": "II", "link": "http://www.fici.org.cn/twelfth/"},
+    {"edition": "成都峰会", "date": "2015.09.19", "theme": "新常态：城市发展与创新设计", "stage": "summit", "link": ""},
+    {"edition": "第十三届", "date": "2016.01.09", "theme": "中国精神与文化创新", "stage": "II", "link": "http://www.fici.org.cn/thirteenth/"},
+    {"edition": "成都峰会", "date": "2016.11.26", "theme": "新经济：文创城市与创新驱动", "stage": "summit", "link": ""},
+    {"edition": "第十四届", "date": "2017.01.07", "theme": "文创+时代：审美驱动与产业创新", "stage": "II", "link": "http://www.fici.org.cn/fourteenth/"},
+    {"edition": "第十五届", "date": "2018.01.07", "theme": "新时代：美好生活与文化使命", "stage": "II", "link": "http://www.fici.org.cn/fifteenth/"},
+    {"edition": "第十六届", "date": "2019.01.05–06", "theme": "新征程：文化自信与融合创新", "stage": "II", "link": "http://www.fici.org.cn/sixteenth/"},
+    {"edition": "第十七届", "date": "2020.01.04–05", "theme": "新使命：大国文创与文化小康", "stage": "II", "link": "http://www.fici.org.cn/seventeenth/"},
+    {"edition": "第十八届", "date": "2021.01.16–17", "theme": "迈向 2035：文化强国与新发展格局", "stage": "II", "link": "http://www.fici.org.cn/eighteenth/"},
+    {"edition": "第十九届", "date": "2022.01.07–08", "theme": "文化基因与中国道路", "stage": "II", "link": "http://www.fici.org.cn/nineteenth/"},
+    {"edition": "第二十届", "date": "2023.01.07–08", "theme": "中国式现代化与文化新辉煌", "stage": "transit", "link": "http://www.fici.org.cn/twentieth/"},
+    {"edition": "第二十一届", "date": "2024.01.06–07", "theme": "新起点：文化强国与中华民族现代文明", "stage": "III", "link": "http://www.fici.org.cn/fici21/"},
+    {"edition": "第二十二届", "date": "2025.01.11–12", "theme": "新高峰：中华文化与强国建设", "stage": "III", "link": ""},
+    {"edition": "第二十三届", "date": "2026.01.10–11", "theme": "智能与文化：人类文明的价值共创", "stage": "III", "link": ""}
+  ],
+  "milestones": [
+    {
+      "year": "2013",
+      "edition": "第十届",
+      "tag": "十年节点",
+      "title": "第一次以十年为尺度做总结",
+      "desc": "前十届共邀请各界嘉宾约 900 人，其中港澳台 100 余人、国际友人近 80 人，累计参会近 1 万人次。这一届定下了年度盘点的做法，蓝皮书与论坛开始配套出版。"
+    },
+    {
+      "year": "2023",
+      "edition": "第二十届",
+      "tag": "二十届",
+      "title": "讨论重心转向国家现代化",
+      "desc": "主题定为中国式现代化与文化新辉煌，论坛从产业政策讨论走向国家现代化命题。同期的海淀文化产业对话会发布《海淀文化消费研究报告》，论坛开始承接区域层面的政策发布。"
+    },
+    {
+      "year": "2026",
+      "edition": "第二十三届",
+      "tag": "智能转向",
+      "title": "AI 第一次成为主题主轴",
+      "desc": "设 8 场平行主题论坛与 6 场青年学者研讨会，覆盖文化政策、AI 文化新图景、非遗数智化、乡土文旅、人文经济学、文旅创意、中华美学基因与艺术乡建等方向，并发布洛神赋智能创作器 2.0。"
+    }
+  ],
+  "topics": [
+    {"topic": "产业融合", "first": "2010 第七届", "mid": "2015 第十二届 文化战略与产业融合", "now": "已细化为文旅+百业、文商旅体融合，融合的落点从产业下沉到场景。"},
+    {"topic": "科技", "first": "2013 第十届 创意与科技", "mid": "2017 文创+时代", "now": "2026 年智能与文化：技术从工具变成生产主体，讨论重心转向治理与伦理。"},
+    {"topic": "乡村", "first": "2006 第三届 区域文化产业", "mid": "2020 年前后乡创议题", "now": "数智乡创、艺术乡建：从文化惠民转向创意赋能与社区营造。"},
+    {"topic": "国际", "first": "2008 第五届 软实力", "mid": "2019 年前后 文化走出去", "now": "文化出海 2.0：从输出内容升级为输出模式与平台。"}
+  ]
+}

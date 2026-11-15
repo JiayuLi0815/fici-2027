@@ -23,6 +23,7 @@ def load(n):
 
 SITE = load("site.json")
 PROGRAMS = load("programs.json")
+AGENDA = load("agenda.json")
 NEWS = load("news.json")
 PUBLICATIONS = load("publications.json")
 GALLERY = load("gallery.json")
@@ -37,7 +38,7 @@ def nav(active):
     out = []
     for n in SITE["nav"]:
         cls = ' class="is-active"' if n["href"] == active else ""
-        out.append('<li><a href="%s"%s>%s</a></li>' % (n["href"], cls, esc(n["label"])))
+        out.append('<li%s><a href="%s">%s</a></li>' % (cls, n["href"], esc(n["label"])))
     return "\n        ".join(out)
 
 
@@ -217,7 +218,7 @@ def build_index():
     <div class="about-grid">
       <div class="about-body">
 %s
-        <p>中国文化产业新年论坛创办于 2003 年，由北京大学主办、北京大学文化产业研究院承办，是国内最早发起、持续关注中国文化产业发展的专业论坛之一。论坛以促进文化产业领域内政府、企业与学界之间的交流为宗旨，坚持“学术与现实的交融、战略与发展的创新”的发展理念，致力于推动文化产业重大政策、前沿理论与产业实践的互动发展。第二十四届论坛将在往届基础上进一步聚焦年度主题的学理阐释与实践路径，围绕主论坛、平行论坛、专题对话等板块组织研讨。</p>
+        <p>中国文化产业新年论坛创办于 2003 年，由北京大学主办、北京大学文化产业研究院承办，是国内最早发起、持续关注中国文化产业发展的专业论坛之一。论坛以促进文化产业领域内政府、企业与学界之间的交流为宗旨，坚持“学术与现实的交融、战略与发展的创新”的发展理念，致力于推动文化产业重大政策、前沿理论与产业实践的互动发展。第二十四届论坛将在往届基础上进一步聚焦年度主题的学理阐释与实践路径，围绕主论坛、十场主题论坛、青年学者研讨会与智库对话组织研讨。</p>
       </div>
 
       <aside class="about-aside">
@@ -253,10 +254,11 @@ def build_index():
 <section class="section section-alt" id="program">
   <div class="container">
 %s
-    <div class="program-grid">%s
+    <div class="program-grid%s">%s
     </div>
   </div>
-</section>""" % (head("Forum Sessions", "论坛板块"), "".join(cards))
+</section>""" % (head("Forum Sessions", "论坛板块"),
+                " is-even" if len(PROGRAMS) % 3 else "", "".join(cards))
 
     news_cards = []
     for n in NEWS[:3]:
@@ -340,7 +342,7 @@ def build_index():
     hero = """
 <section class="hero" aria-label="主视觉">
   <div class="hero-poster-wrap">
-    <img class="hero-poster" src="assets/hero-poster.png" alt="2027第二十四届中国文化产业新年论坛主视觉海报" width="2002" height="858">
+    <img class="hero-poster" src="assets/hero-poster.jpg" alt="2027第二十四届中国文化产业新年论坛主视觉海报" width="2401" height="1032">
   </div>
   <div class="hero-bar" aria-hidden="true"></div>
 </section>"""
@@ -385,44 +387,41 @@ def build_news():
 # ------------------------------------------------------------------ 简要日程
 
 def build_agenda():
-    merged = {}
-    for p in PROGRAMS:
-        for d in p["agenda"]:
-            slot = merged.setdefault(d["date"], {"day": d["day"], "date": d["date"], "slots": {}})
-            for it in d["items"]:
-                slot["slots"].setdefault(it["time"], []).append(
-                    dict(it, owner=p["name"]))
-    days = [merged[k] for k in sorted(merged)]
-
     cols = []
-    for d in days:
+    for d in AGENDA["days"]:
         rows = []
-        for t in sorted(d["slots"]):
-            entries = "\n".join(
-                '<p class="ag-title">%s</p><p class="ag-meta">%s　·　%s</p>'
-                % (esc(it["title"]), esc(it["owner"]), esc(it["meta"]))
-                for it in d["slots"][t])
-            rows.append('<li><time>%s</time><div>%s</div></li>' % (esc(t), entries))
+        for slot in d["slots"]:
+            entries = []
+            for it in slot["items"]:
+                meta = "　·　".join(x for x in (it.get("host"), it.get("venue")) if x)
+                block = '<p class="ag-title">%s</p>' % esc(it["title"])
+                if meta:
+                    block += '<p class="ag-meta">%s</p>' % esc(meta)
+                if it.get("desc"):
+                    block += '<p class="ag-desc">%s</p>' % esc(it["desc"])
+                entries.append(block)
+            rows.append('<li><time>%s</time><div>%s</div></li>'
+                        % (esc(slot["time"]), "\n".join(entries)))
         cols.append("""
         <div class="agenda-day">
           <div class="agenda-day-head">
-            <span class="day-index">%s</span>
+            <span class="day-index">%s<em>%s</em></span>
             <span class="day-date">%s</span>
           </div>
           <ol class="agenda-list">
 %s
           </ol>
-        </div>""" % (esc(d["day"]), esc(d["date"]), "\n".join(rows)))
+        </div>""" % (esc(d["day"]), esc(d.get("name", "")), esc(d["date"]), "\n".join(rows)))
 
     body = page_hero('<a href="index.html">首页</a><span>/</span>简要日程',
-                     "Programme at a Glance", "简要日程",
-                     "以下为日程框架，各环节的具体时间、地点与出席嘉宾以组委会正式公布为准。") + """
+                     "Programme at a Glance", "简要日程", AGENDA["lead"]) + """
 <section class="section">
   <div class="container">
-    <div class="agenda-grid">%s
+    <div class="agenda-grid is-single">%s
     </div>
+    <p class="micro-note">%s</p>
   </div>
-</section>""" % "".join(cols)
+</section>""" % ("".join(cols), esc(AGENDA["note"]))
     shell("agenda.html", "简要日程 | %s" % SITE["name"],
           "2027第二十四届中国文化产业新年论坛日程安排。", "agenda.html", body)
 
@@ -443,19 +442,54 @@ def build_program():
       </a>""" % (main, p["slug"], esc(p["badge"]), esc(p["name"]), esc(p["en"]), esc(p["lead"])))
     body = page_hero('<a href="index.html">首页</a><span>/</span>论坛板块',
                      "Forum Sessions", "论坛板块",
-                     "本届论坛设六个板块，分别面向全体会议、并行议题、产业实践、青年学术、政策研判与成果发布。") + """
+                     "本届论坛由一场主论坛、十场主题论坛，以及青年学者研讨会与智库对话组成。") + """
 <section class="section">
   <div class="container">
-    <div class="program-grid">%s
+    <div class="program-grid%s">%s
     </div>
   </div>
-</section>""" % "".join(cards)
+</section>""" % (" is-even" if len(PROGRAMS) % 3 else "", "".join(cards))
     shell("program.html", "论坛板块 | %s" % SITE["name"],
           "2027第二十四届中国文化产业新年论坛板块设置。", "program.html", body)
 
 
+def forum_cards():
+    """主题论坛十场，直接取自议程数据，避免两处维护。"""
+    cards = []
+    for day in AGENDA["days"]:
+        for slot in day["slots"]:
+            for it in slot["items"]:
+                if not it["title"].startswith("主题论坛"):
+                    continue
+                name, _, theme = it["title"].partition(" · ")
+                when = "%s %s" % (day["name"], slot["time"])
+                place = " · ".join(x for x in (when, it.get("venue")) if x)
+                detail = "　·　".join(x for x in (it.get("host"), it.get("desc")) if x)
+                cards.append("""
+      <article class="forum-card">
+        <span class="chip">%s</span>
+        <h4>%s</h4>
+        <p class="arch-meta">%s</p>
+        <p>%s</p>
+      </article>""" % (esc(name), esc(theme), esc(place), esc(detail)))
+    return '<div class="forum-grid">%s\n    </div>' % "".join(cards)
+
+
 def build_program_page(p):
-    topics = "".join('<li>%s</li>' % esc(t) for t in p["topics"])
+    blocks = []
+
+    if p["slug"] == "theme":
+        blocks.append('<h3 class="sub-title">十场主题论坛</h3>\n    %s' % forum_cards())
+
+    if p["topics"]:
+        blocks.append('<h3 class="sub-title">议题方向</h3>\n    <ul class="topic-list">%s</ul>'
+                      % "".join('<li>%s</li>' % esc(t) for t in p["topics"]))
+
+    if p["agenda"]:
+        blocks.append('<h3 class="sub-title">议程安排</h3>\n    %s\n'
+                      '    <p class="micro-note">具体时间、地点与出席嘉宾以组委会正式公布为准。</p>'
+                      % agenda_cols(p["agenda"]))
+
     body = page_hero('<a href="index.html">首页</a><span>/</span>'
                      '<a href="program.html">论坛板块</a><span>/</span>%s' % esc(p["name"]),
                      p["en"], p["name"]) + """
@@ -463,15 +497,10 @@ def build_program_page(p):
   <div class="container">
 
     <div class="page-prose">
-%s
+      <p>%s</p>
     </div>
 
-    <h3 class="sub-title">议题方向</h3>
-    <ul class="topic-list">%s</ul>
-
-    <h3 class="sub-title">议程安排</h3>
     %s
-    <p class="micro-note">具体时间、地点与出席嘉宾以组委会正式公布为准。</p>
 
     <h3 class="sub-title">现场图片</h3>
     <div class="shot-grid">%s
@@ -483,9 +512,8 @@ def build_program_page(p):
     <a class="back-link" href="program.html">← 返回论坛板块</a>
   </div>
 </section>""" % (
-        "      <p>%s</p>" % esc("".join([p["lead"]] + p["intro"])),
-        topics,
-        agenda_cols(p["agenda"]),
+        esc("".join([p["lead"]] + p["intro"])),
+        "\n\n    ".join(blocks),
         "\n      ".join(shot(i) for i in p["images"]),
         doc_list(p["docs"], "相关文件将陆续发布。"),
     )
@@ -512,32 +540,79 @@ def build_speeches():
 # ------------------------------------------------------------------ 出版物
 
 def build_publication():
-    cards = []
-    for i, p in enumerate(PUBLICATIONS):
-        if p.get("file"):
-            action = '<a class="pub-dl" href="%s" download>下载 PDF</a>' % esc(p["file"])
-        else:
-            action = '<span class="pub-dl is-off">%s</span>' % esc(p.get("meta", ""))
-        cards.append("""
-      <article class="pub-card">
-        <div class="ph-cover cover-%d"></div>
-        <div class="pub-body">
-          <span class="chip">%s</span>
-          <h3>%s</h3>
-          <p>%s</p>
-          %s
-        </div>
-      </article>""" % ((i % 3) + 1, esc(p["tag"]), esc(p["title"]), esc(p["desc"]), action))
+    bb = PUBLICATIONS["bluebook"]
+    iters = "".join("""
+      <article class="iter-card">
+        <p class="iter-ver">%s</p>
+        <h4>%s</h4>
+        <p>%s</p>
+      </article>""" % (esc(i["ver"]), esc(i["title"]), esc(i["desc"])) for i in bb["iterations"])
+    mods = "".join("""
+      <div class="mod-card">
+        <span class="mod-role">%s</span>
+        <h4>%s</h4>
+        <p>%s</p>
+      </div>""" % (esc(m["role"]), esc(m["name"]), esc(m["desc"])) for m in bb["modules"])
+
+    rp = PUBLICATIONS["report"]
+    layers = "".join("""
+      <div class="layer-card">
+        <h4>%s</h4>
+        <p>%s</p>
+      </div>""" % (esc(l["name"]), esc(l["desc"])) for l in rp["layers"])
+    term_blocks = []
+    for lst in rp["lists"]:
+        items = "".join("<li>%s</li>" % esc(x) for x in lst["items"])
+        term_blocks.append("""
+      <div class="term-block is-%s">
+        <p class="term-head">%s</p>
+        <ul class="term-list">%s</ul>
+      </div>""" % (esc(lst["tone"]), esc(lst["title"]), items))
+
+    arch = "".join("""
+      <div class="arch-card">
+        <span class="chip">%s</span>
+        <h4>%s</h4>
+        <p class="arch-meta">%s</p>
+        <p>%s</p>
+      </div>""" % (esc(a["tag"]), esc(a["title"]), esc(a["meta"]), esc(a["desc"]))
+        for a in PUBLICATIONS["archives"])
+
     body = page_hero('<a href="index.html">首页</a><span>/</span>出版物',
-                     "Publications", "出版物") + """
+                     "Publications", "出版物",
+                     "论坛出版物包括每年一本的文化产业蓝皮书、“北大报告”，以及系列指数、白皮书与研究报告。"
+                     "多数成果在论坛上首次发布。") + """
 <section class="section">
   <div class="container">
-    <div class="pub-grid">%s
+
+    <h3 class="sub-title">%s</h3>
+    <p class="page-lead">%s</p>
+    <div class="iter-grid">%s
     </div>
+    <div class="mod-grid">%s
+    </div>
+
+    <h3 class="sub-title">%s</h3>
+    <p class="page-lead">%s</p>
+    <div class="layer-grid">%s
+    </div>
+    <div class="term-stack">%s
+    </div>
+
+    <h3 class="sub-title">历届重点成果</h3>
+    <div class="arch-grid">%s
+    </div>
+    <p class="micro-note">%s</p>
+
   </div>
-</section>""" % "".join(cards)
+</section>""" % (
+        esc(bb["title"]), esc(bb["lead"]), iters, mods,
+        esc(rp["title"]), esc(rp["lead"]), layers, "".join(term_blocks),
+        arch, esc(PUBLICATIONS["note"]),
+    )
     shell("publication.html", "出版物 | %s" % SITE["name"],
-          "中国文化产业年度发展报告、中国文化产业评论与本年度前沿报告。", "publication.html", body)
+          "文化产业蓝皮书、“北大报告”年度热词、特征与趋势，以及历届论坛发布的指数、白皮书与研究报告。",
+          "publication.html", body)
 
 
 # ------------------------------------------------------------------ 论坛风采
@@ -558,31 +633,90 @@ def build_gallery():
 # ------------------------------------------------------------------ 历届论坛
 
 def build_history():
-    items = []
-    for h in HISTORY:
-        label = h.get("year") or "专题页"
-        if h["status"] == "current":
-            items.append('<li class="year-current"><b>%s</b><span>%s · 本届</span></li>'
-                         % (esc(h["edition"]), esc(h["year"])))
-        elif h["status"] == "pending":
-            items.append('<li class="year-pending"><b>%s</b><span>%s · 暂无专题页</span></li>'
-                         % (esc(h["edition"]), esc(h["year"])))
-        elif h["link"]:
-            items.append('<li><a href="%s" target="_blank" rel="noopener"><b>%s</b><span>%s</span></a></li>'
-                         % (esc(h["link"]), esc(h["edition"]), esc(label)))
+    stages = {s["id"]: s for s in HISTORY["stages"]}
+    phase_cards = "".join("""
+      <article class="phase-card">
+        <p class="phase-num">%s</p>
+        <h3>%s</h3>
+        <p class="phase-range">%s</p>
+        <p class="phase-desc">%s</p>
+        <div class="kw-list">%s</div>
+      </article>""" % (esc(s["no"]), esc(s["name"]), esc(s["range"]), esc(s["desc"]),
+                        "".join("<span>%s</span>" % esc(k) for k in s["keywords"]))
+        for s in HISTORY["stages"])
+
+    rows = []
+    for e in HISTORY["editions"]:
+        st = e["stage"]
+        if st == "summit":
+            rowcls = ' class="is-summit"'
+            stage_html = '<span class="stage-chip is-summit">地方峰会</span>'
+        elif st == "transit":
+            rowcls = ""
+            stage_html = '<span class="stage-chip is-transit">过渡</span>'
         else:
-            items.append('<li class="year-pending"><b>%s</b><span>%s</span></li>'
-                         % (esc(h["edition"]), esc(label)))
+            rowcls = ""
+            stage_html = '<span class="stage-chip">%s</span>' % esc(stages[st]["label"])
+        if e.get("link"):
+            ed_html = ('<a class="ed-link" href="%s" target="_blank" rel="noopener">%s'
+                       '<span aria-hidden="true">↗</span></a>' % (esc(e["link"]), esc(e["edition"])))
+        else:
+            ed_html = '<span class="ed-plain">%s</span>' % esc(e["edition"])
+        rows.append('          <tr%s><td class="ed">%s</td><td class="yr">%s</td>'
+                    '<td class="thm">%s</td><td>%s</td></tr>'
+                    % (rowcls, ed_html, esc(e["date"]), esc(e["theme"]), stage_html))
+
+    miles = "".join("""
+      <article class="mile-card">
+        <p class="mile-year">%s</p>
+        <p class="mile-meta">%s<span>·</span>%s</p>
+        <h3>%s</h3>
+        <p>%s</p>
+      </article>""" % (esc(m["year"]), esc(m["edition"]), esc(m["tag"]), esc(m["title"]), esc(m["desc"]))
+        for m in HISTORY["milestones"])
+
+    topic_rows = "".join("""
+          <tr><td class="thm" data-label="议题">%s</td><td class="yr" data-label="首次出现">%s</td><td data-label="中期演进">%s</td><td data-label="当前认知（2026）">%s</td></tr>"""
+        % (esc(t["topic"]), esc(t["first"]), esc(t["mid"]), esc(t["now"])) for t in HISTORY["topics"])
+
     body = page_hero('<a href="index.html">首页</a><span>/</span>历届论坛',
-                     "Past Forums", "历届论坛") + """
+                     "Past Forums", "历届论坛", HISTORY["lead"]) + """
 <section class="section">
   <div class="container">
-    <ul class="year-grid">%s
-    </ul>
+
+    <h3 class="sub-title">三个阶段</h3>
+    <div class="phase-grid">%s
+    </div>
+
+    <h3 class="sub-title">历届主题（2003—2026）</h3>
+    <div class="table-wrap">
+      <table class="data-table is-history">
+        <thead><tr><th>届次</th><th>时间</th><th>主题</th><th>阶段</th></tr></thead>
+        <tbody>
+%s
+        </tbody>
+      </table>
+    </div>
+    <p class="micro-note">%s</p>
+
+    <h3 class="sub-title">里程碑届次</h3>
+    <div class="mile-grid">%s
+    </div>
+
+    <h3 class="sub-title">同一议题的认知深化</h3>
+    <div class="table-wrap">
+      <table class="data-table is-topics">
+        <thead><tr><th>议题</th><th>首次出现</th><th>中期演进</th><th>当前认知（2026）</th></tr></thead>
+        <tbody>%s
+        </tbody>
+      </table>
+    </div>
+    <p class="micro-note">同一个议题讨论得越久，落点越具体：从国家层面落到具体场景，从做什么落到怎么做、谁来评估。</p>
+
   </div>
-</section>""" % "\n      ".join(items)
+</section>""" % (phase_cards, "\n".join(rows), esc(HISTORY["note"]), miles, topic_rows)
     shell("history.html", "历届论坛 | %s" % SITE["name"],
-          "中国文化产业新年论坛历届专题页面。", "history.html", body)
+          "中国文化产业新年论坛历届主题、阶段演变与里程碑届次（2003—2026）。", "history.html", body)
 
 
 # ------------------------------------------------------------------ 参会服务

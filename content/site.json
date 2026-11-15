@@ -12,6 +12,10 @@
   "edition": "第二十四届",
   "nav": [
     {
+      "label": "首页",
+      "href": "index.html"
+    },
+    {
       "label": "最新消息",
       "href": "news.html"
     },
