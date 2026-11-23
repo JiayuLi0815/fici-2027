@@ -167,7 +167,6 @@
     if ($('listLead')) $('listLead').textContent = sec.lead || '';
     if ($('listCrumb')) {
       $('listCrumb').innerHTML =
-        '<a href="index.html">首页</a><span>/</span>' +
         '<a href="media.html">媒体素材</a><span>/</span>' +
         '<span class="crumb-now">' + esc(sec.name) + '</span>';
     }
@@ -238,7 +237,6 @@
     if ($('detailEyebrow')) $('detailEyebrow').textContent = (KINDS[item.kind] || '素材') + ' · ' + GROUPS[type].short;
     if ($('detailCrumb')) {
       $('detailCrumb').innerHTML =
-        '<a href="index.html">首页</a><span>/</span>' +
         '<a href="media.html">媒体素材</a><span>/</span>' +
         '<a href="' + esc(listHref(sec, type)) + '">' + esc(sec.name) + '</a><span>/</span>' +
         '<span class="crumb-now">' + esc(GROUPS[type].short) + '</span>';

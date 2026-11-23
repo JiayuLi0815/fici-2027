@@ -72,7 +72,7 @@ FOOTER = """
         <p class="fl-title">快速导航</p>
         <a href="agenda.html">简要日程</a>
         <a href="program.html">论坛板块</a>
-        <a href="media.html">媒体素材</a>
+        <a href="gallery.html">论坛风采</a>
       </div>
       <div>
         <p class="fl-title">相关链接</p>
@@ -94,6 +94,61 @@ FOOTER = """
 """ % (
     esc(SITE["host"]), esc(SITE["organizer"]),
 )
+
+
+MEDIA_HEADER = """
+<header class="media-topbar">
+  <div class="media-topbar-inner">
+    <a class="media-brand" href="media.html">
+      <span class="media-brand-mark" aria-hidden="true">24</span>
+      <span class="media-brand-text">
+        <strong>2027 新年论坛 · 媒体素材库</strong>
+        <small>Media Library</small>
+      </span>
+    </a>
+    <span class="media-private">媒体内部链接</span>
+  </div>
+</header>
+"""
+
+MEDIA_FOOTER = """
+<footer class="media-footer">
+  <div class="media-footer-inner">
+    <p>2027 中国文化产业新年论坛组委会</p>
+    <p>媒体素材库 · 仅供媒体报道使用</p>
+  </div>
+</footer>
+"""
+
+
+def media_shell(filename, title, desc, body):
+    doc = """<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>%s</title>
+<meta name="description" content="%s">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/media.css">
+</head>
+<body id="top" class="is-media">
+
+%s
+
+<main>
+%s
+</main>
+
+%s
+
+<script src="assets/media.js"></script>
+</body>
+</html>
+""" % (esc(title), esc(desc), MEDIA_HEADER, body, MEDIA_FOOTER)
+    (ROOT / filename).write_text(doc, encoding="utf-8")
 
 
 def shell(filename, title, desc, active, body, is_home=False, extra_head="", extra_scripts=""):
@@ -228,11 +283,6 @@ def build_index():
           <p class="cd-unit">天</p>
           <p class="cd-date">2027.01.09 · 北京</p>
         </div>
-        <div class="aside-note">
-          <p class="aside-note-title">媒体素材</p>
-          <p>论坛主视觉、各板块现场图片与新闻稿件将陆续上传，官方媒体可进入素材库检索并下载。</p>
-          <a class="btn-ghost" href="media.html">进入媒体素材库</a>
-        </div>
       </aside>
     </div>
   </div>
@@ -277,27 +327,6 @@ def build_index():
   </div>
 </section>""" % "\n      ".join(photos)
 
-    media = """
-<section class="section" id="media">
-  <div class="container">
-%s
-    <div class="media-band">
-      <div class="media-band-body">
-        <p class="media-band-lead">论坛主视觉、各板块现场图片、新闻稿件与相关报道集中发布，官方媒体可按板块检索、预览并下载使用。</p>
-        <ul class="media-band-points">
-          <li><b>图片</b><span>主视觉 / 现场 / 嘉宾</span></li>
-          <li><b>新闻稿</b><span>会议通稿 / 板块稿件</span></li>
-          <li><b>相关报道</b><span>官方媒体发布汇编</span></li>
-        </ul>
-      </div>
-      <div class="media-band-action">
-        <a class="btn-solid" href="media.html">进入媒体素材库</a>
-        <p class="media-band-note">素材持续更新，供媒体报道使用</p>
-      </div>
-    </div>
-  </div>
-</section>""" % head("Media Library", "媒体素材库")
-
     hero = """
 <section class="hero" aria-label="主视觉">
   <div class="hero-poster-wrap">
@@ -312,7 +341,7 @@ def build_index():
           % (SITE["name"], SITE["theme"], SITE["dateFull"], SITE["place"],
              SITE["host"], SITE["organizer"]),
           "index.html",
-          hero + about + program + gallery + media,
+          hero + about + program + gallery,
           is_home=True)
 
 
@@ -657,7 +686,7 @@ def build_history():
 
 def build_media():
     body = page_hero(
-        '<a href="index.html">首页</a><span>/</span>媒体素材',
+        '媒体素材',
         "Media Library", "媒体素材库",
         "2027 新年论坛各板块的图片、新闻稿件与相关报道，按板块集中归档，供官方媒体检索、预览和下载使用。"
     ) + """
@@ -667,7 +696,7 @@ def build_media():
     <div class="media-toolbar">
       <p class="media-updated">更新于 <span id="mediaUpdated">—</span></p>
       <p class="media-total">共 <b id="mediaTotal">—</b> 项素材</p>
-      <p class="media-toolbar-note">素材供媒体报道使用，转载请注明来源</p>
+      <p class="media-toolbar-note">媒体内部链接 · 仅供报道使用</p>
     </div>
 
     <nav class="media-jump" id="mediaJump" aria-label="按板块浏览素材"></nav>
@@ -690,18 +719,16 @@ def build_media():
 
   </div>
 </section>"""
-    shell("media.html", "媒体素材库 | %s" % SITE["name"],
-          "2027第二十四届中国文化产业新年论坛媒体素材库：各板块现场图片、新闻稿件与相关报道，供官方媒体检索下载。",
-          "media.html", body,
-          extra_head='<link rel="stylesheet" href="assets/media.css">',
-          extra_scripts='<script src="assets/media.js"></script>')
+    media_shell("media.html", "媒体素材库 | %s" % SITE["name"],
+                "2027第二十四届中国文化产业新年论坛媒体素材库：各板块现场图片、新闻稿件与相关报道，供官方媒体检索下载。",
+                body)
 
 
 def build_media_list():
     body = """
 <section class="page-hero">
   <div class="container">
-    <p class="crumb" id="listCrumb"><a href="index.html">首页</a><span>/</span><a href="media.html">媒体素材</a></p>
+    <p class="crumb" id="listCrumb"><a href="media.html">媒体素材</a></p>
     <p class="eyebrow" id="listEyebrow">Media Library</p>
     <h1 class="page-title" id="listTitle">素材列表</h1>
     <span class="title-rule"><i></i><i></i><i></i></span>
@@ -720,17 +747,15 @@ def build_media_list():
     <p class="media-back"><a class="btn-ghost" href="media.html">← 返回媒体素材库</a></p>
   </div>
 </section>"""
-    shell("media-list.html", "素材列表 | 媒体素材库 | %s" % SITE["name"],
-          "2027新年论坛媒体素材列表。", "media.html", body,
-          extra_head='<link rel="stylesheet" href="assets/media.css">',
-          extra_scripts='<script src="assets/media.js"></script>')
+    media_shell("media-list.html", "素材列表 | 媒体素材库 | %s" % SITE["name"],
+                "2027新年论坛媒体素材列表。", body)
 
 
 def build_media_detail():
     body = """
 <section class="page-hero">
   <div class="container">
-    <p class="crumb" id="detailCrumb"><a href="index.html">首页</a><span>/</span><a href="media.html">媒体素材</a></p>
+    <p class="crumb" id="detailCrumb"><a href="media.html">媒体素材</a></p>
     <p class="eyebrow" id="detailEyebrow">Media Library</p>
     <h1 class="page-title" id="detailTitle">素材详情</h1>
     <span class="title-rule"><i></i><i></i><i></i></span>
@@ -744,10 +769,8 @@ def build_media_detail():
     <p class="media-back" id="detailBack"><a class="btn-ghost" href="media.html">← 返回媒体素材库</a></p>
   </div>
 </section>"""
-    shell("media-detail.html", "素材详情 | 媒体素材库 | %s" % SITE["name"],
-          "2027新年论坛媒体素材详情。", "media.html", body,
-          extra_head='<link rel="stylesheet" href="assets/media.css">',
-          extra_scripts='<script src="assets/media.js"></script>')
+    media_shell("media-detail.html", "素材详情 | 媒体素材库 | %s" % SITE["name"],
+                "2027新年论坛媒体素材详情。", body)
 
 
 # ------------------------------------------------------------------ 构建
