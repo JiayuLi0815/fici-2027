@@ -26,7 +26,6 @@ PROGRAMS = load("programs.json")
 AGENDA = load("agenda.json")
 PUBLICATIONS = load("publications.json")
 GALLERY = load("gallery.json")
-DOCUMENTS = load("documents.json")
 HISTORY = load("history.json")
 SPEECHES = load("speeches.json")
 
@@ -73,7 +72,7 @@ FOOTER = """
         <p class="fl-title">快速导航</p>
         <a href="agenda.html">简要日程</a>
         <a href="program.html">论坛板块</a>
-        <a href="service.html">参会服务</a>
+        <a href="media.html">媒体素材</a>
       </div>
       <div>
         <p class="fl-title">相关链接</p>
@@ -97,7 +96,7 @@ FOOTER = """
 )
 
 
-def shell(filename, title, desc, active, body, is_home=False):
+def shell(filename, title, desc, active, body, is_home=False, extra_head="", extra_scripts=""):
     doc = """<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -107,6 +106,7 @@ def shell(filename, title, desc, active, body, is_home=False):
 <meta name="description" content="%s">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/style.css">
+%s
 </head>
 <body id="top"%s>
 
@@ -119,14 +119,15 @@ def shell(filename, title, desc, active, body, is_home=False):
 %s
 
 <script src="assets/main.js"></script>
+%s
 </body>
 </html>
 """ % (
-        esc(title), esc(desc),
+        esc(title), esc(desc), extra_head,
         "" if is_home else ' class="is-sub"',
         HEADER % (esc(SITE["brand"]), nav(active)),
         body,
-        FOOTER,
+        FOOTER, extra_scripts,
     )
     (ROOT / filename).write_text(doc, encoding="utf-8")
 
@@ -228,9 +229,9 @@ def build_index():
           <p class="cd-date">2027.01.09 · 北京</p>
         </div>
         <div class="aside-note">
-          <p class="aside-note-title">参会提示</p>
-          <p>本届论坛参会报名、媒体注册与议程发布通道将于近期开放，具体安排以组委会公告为准。</p>
-          <a class="btn-ghost" href="service.html">查看参会服务</a>
+          <p class="aside-note-title">媒体素材</p>
+          <p>论坛主视觉、各板块现场图片与新闻稿件将陆续上传，官方媒体可进入素材库检索并下载。</p>
+          <a class="btn-ghost" href="media.html">进入媒体素材库</a>
         </div>
       </aside>
     </div>
@@ -276,40 +277,26 @@ def build_index():
   </div>
 </section>""" % "\n      ".join(photos)
 
-    service = """
-<section class="section" id="service">
+    media = """
+<section class="section" id="media">
   <div class="container">
 %s
-    <div class="service-grid">
-      <a class="service-card" href="service.html">
-        <span class="svc-icon" aria-hidden="true">◎</span>
-        <h3>会场与交通</h3>
-        <p>会场地址、交通指引与校园平面图，会前随议程一并发布。</p>
-        <span class="svc-link">查看详情 →</span>
-      </a>
-      <a class="service-card" href="service.html">
-        <span class="svc-icon" aria-hidden="true">✎</span>
-        <h3>在线报名</h3>
-        <p>参会报名与媒体注册通道，预计于 2026 年 12 月开放。</p>
-        <span class="svc-link">查看详情 →</span>
-      </a>
-      <a class="service-card" href="service.html">
-        <span class="svc-icon" aria-hidden="true">↓</span>
-        <h3>下载专区</h3>
-        <p>论坛手册、征稿启事、参会表格等文件集中下载。</p>
-        <span class="svc-link">查看详情 →</span>
-      </a>
-    </div>
-
-    <div class="contact-band">
-      <div>
-        <p class="contact-label">组委会联系方式</p>
-        <p class="contact-line">%s　·　%s</p>
+    <div class="media-band">
+      <div class="media-band-body">
+        <p class="media-band-lead">论坛主视觉、各板块现场图片、新闻稿件与相关报道集中发布，官方媒体可按板块检索、预览并下载使用。</p>
+        <ul class="media-band-points">
+          <li><b>图片</b><span>主视觉 / 现场 / 嘉宾</span></li>
+          <li><b>新闻稿</b><span>会议通稿 / 板块稿件</span></li>
+          <li><b>相关报道</b><span>官方媒体发布汇编</span></li>
+        </ul>
       </div>
-      <a class="btn-solid" href="service.html">参会服务</a>
+      <div class="media-band-action">
+        <a class="btn-solid" href="media.html">进入媒体素材库</a>
+        <p class="media-band-note">素材持续更新，供媒体报道使用</p>
+      </div>
     </div>
   </div>
-</section>""" % (head("Attendance", "参会服务"), esc(SITE["contact"]["secretariat"]), esc(SITE["contact"]["address"]))
+</section>""" % head("Media Library", "媒体素材库")
 
     hero = """
 <section class="hero" aria-label="主视觉">
@@ -325,7 +312,7 @@ def build_index():
           % (SITE["name"], SITE["theme"], SITE["dateFull"], SITE["place"],
              SITE["host"], SITE["organizer"]),
           "index.html",
-          hero + about + program + gallery + service,
+          hero + about + program + gallery + media,
           is_home=True)
 
 
@@ -666,69 +653,101 @@ def build_history():
           "中国文化产业新年论坛历届主题、阶段演变与里程碑届次（2003—2026）。", "history.html", body)
 
 
-# ------------------------------------------------------------------ 参会服务
+# ------------------------------------------------------------------ 媒体素材库
 
-def build_service():
-    body = page_hero('<a href="index.html">首页</a><span>/</span>参会服务',
-                     "Attendance", "参会服务") + """
+def build_media():
+    body = page_hero(
+        '<a href="index.html">首页</a><span>/</span>媒体素材',
+        "Media Library", "媒体素材库",
+        "2027 新年论坛各板块的图片、新闻稿件与相关报道，按板块集中归档，供官方媒体检索、预览和下载使用。"
+    ) + """
 <section class="section">
   <div class="container">
 
-    <h3 class="sub-title">会场与交通</h3>
-    <div class="service-grid">
-      <div class="service-card">
-        <h3>会场地址</h3>
-        <p>%s</p>
-      </div>
-      <div class="service-card">
-        <h3>交通指引</h3>
-        <p>地铁与公交线路、周边停车信息将随议程一并发布。</p>
-      </div>
-      <div class="service-card">
-        <h3>校园平面图</h3>
-        <p>会场位置与行进路线示意图，可在下载专区获取。</p>
-      </div>
+    <div class="media-toolbar">
+      <p class="media-updated">更新于 <span id="mediaUpdated">—</span></p>
+      <p class="media-total">共 <b id="mediaTotal">—</b> 项素材</p>
+      <p class="media-toolbar-note">素材供媒体报道使用，转载请注明来源</p>
     </div>
 
-    <h3 class="sub-title">报名与注册</h3>
-    <div class="service-grid">
-      <div class="service-card">
-        <h3>参会报名</h3>
-        <p>面向学界与产业界开放，报名通道预计于 2026 年 12 月开启。</p>
-      </div>
-      <div class="service-card">
-        <h3>媒体注册</h3>
-        <p>境内外媒体记者可提交注册申请，凭确认函领取采访证件。</p>
-      </div>
-      <div class="service-card">
-        <h3>论文投稿</h3>
-        <p>青年学者研讨会征稿，具体要求见下载专区的征稿启事。</p>
-      </div>
+    <nav class="media-jump" id="mediaJump" aria-label="按板块浏览素材"></nav>
+
+    <div class="media-sections" id="mediaSections" aria-live="polite">
+      <p class="media-loading">素材加载中……</p>
     </div>
 
-    <h3 class="sub-title">下载专区</h3>
-    %s
-
-    <h3 class="sub-title">联系方式</h3>
-    <div class="contact-band">
-      <div>
-        <p class="contact-label">%s</p>
-        <p class="contact-line">通讯地址：%s　·　联络方式：%s</p>
-      </div>
-      <a class="btn-solid" href="index.html">返回首页</a>
+    <div class="media-empty" id="mediaError" hidden>
+      <p class="media-empty-title">素材暂时无法加载</p>
+      <p>请稍后刷新页面，或联系论坛组委会获取素材。</p>
     </div>
+
+    <noscript>
+      <div class="media-empty">
+        <p class="media-empty-title">需要开启 JavaScript</p>
+        <p>开启后即可按板块浏览媒体素材。</p>
+      </div>
+    </noscript>
 
   </div>
-</section>""" % (
-        esc(SITE["place"]),
-        doc_list(DOCUMENTS, "下载文件将陆续上线。"),
-        esc(SITE["contact"]["secretariat"]),
-        esc(SITE["contact"]["address"]),
-        esc(SITE["contact"]["channel"]),
-    )
-    shell("service.html", "参会服务 | %s" % SITE["name"],
-          "2027第二十四届中国文化产业新年论坛参会服务：会场交通、报名注册、资料下载与联系方式。",
-          "service.html", body)
+</section>"""
+    shell("media.html", "媒体素材库 | %s" % SITE["name"],
+          "2027第二十四届中国文化产业新年论坛媒体素材库：各板块现场图片、新闻稿件与相关报道，供官方媒体检索下载。",
+          "media.html", body,
+          extra_head='<link rel="stylesheet" href="assets/media.css">',
+          extra_scripts='<script src="assets/media.js"></script>')
+
+
+def build_media_list():
+    body = """
+<section class="page-hero">
+  <div class="container">
+    <p class="crumb" id="listCrumb"><a href="index.html">首页</a><span>/</span><a href="media.html">媒体素材</a></p>
+    <p class="eyebrow" id="listEyebrow">Media Library</p>
+    <h1 class="page-title" id="listTitle">素材列表</h1>
+    <span class="title-rule"><i></i><i></i><i></i></span>
+    <p class="page-lead" id="listLead"></p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="media-list-top">
+      <div class="media-tabs" id="mediaTabs"></div>
+      <p class="media-count" id="mediaCount"></p>
+    </div>
+    <div class="media-list" id="mediaList" aria-live="polite">
+      <p class="media-loading">素材加载中……</p>
+    </div>
+    <p class="media-back"><a class="btn-ghost" href="media.html">← 返回媒体素材库</a></p>
+  </div>
+</section>"""
+    shell("media-list.html", "素材列表 | 媒体素材库 | %s" % SITE["name"],
+          "2027新年论坛媒体素材列表。", "media.html", body,
+          extra_head='<link rel="stylesheet" href="assets/media.css">',
+          extra_scripts='<script src="assets/media.js"></script>')
+
+
+def build_media_detail():
+    body = """
+<section class="page-hero">
+  <div class="container">
+    <p class="crumb" id="detailCrumb"><a href="index.html">首页</a><span>/</span><a href="media.html">媒体素材</a></p>
+    <p class="eyebrow" id="detailEyebrow">Media Library</p>
+    <h1 class="page-title" id="detailTitle">素材详情</h1>
+    <span class="title-rule"><i></i><i></i><i></i></span>
+  </div>
+</section>
+<section class="section">
+  <div class="container media-detail-wrap">
+    <article class="media-detail" id="mediaDetail" aria-live="polite">
+      <p class="media-loading">素材加载中……</p>
+    </article>
+    <p class="media-back" id="detailBack"><a class="btn-ghost" href="media.html">← 返回媒体素材库</a></p>
+  </div>
+</section>"""
+    shell("media-detail.html", "素材详情 | 媒体素材库 | %s" % SITE["name"],
+          "2027新年论坛媒体素材详情。", "media.html", body,
+          extra_head='<link rel="stylesheet" href="assets/media.css">',
+          extra_scripts='<script src="assets/media.js"></script>')
 
 
 # ------------------------------------------------------------------ 构建
@@ -743,7 +762,9 @@ def main():
     build_publication()
     build_gallery()
     build_history()
-    build_service()
+    build_media()
+    build_media_list()
+    build_media_detail()
     files = sorted(x.name for x in ROOT.glob("*.html"))
     print("已生成 %d 个页面：%s" % (len(files), "、".join(files)))
 

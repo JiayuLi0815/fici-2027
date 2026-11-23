@@ -39,4 +39,4 @@ uploads/
 
 不需要装任何软件：在 GitHub 仓库页面进入对应目录 →
 `Add file` → `Upload files` → 拖进去 → `Commit changes`。
-把文件名告诉负责更新页面的同学，由其在 `content/*.json` 里登记。
+把文件名告诉负责更新页面的同学，由其在 `content/*.json` 里登记；媒体素材库的条目登记在 `content/media.json`（字段说明见根目录 `MEDIA.md`）。

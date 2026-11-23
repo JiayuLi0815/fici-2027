@@ -24,6 +24,10 @@
       "href": "program.html"
     },
     {
+      "label": "媒体素材",
+      "href": "media.html"
+    },
+    {
       "label": "演讲集萃",
       "href": "speeches.html"
     },
@@ -38,10 +42,6 @@
     {
       "label": "历届论坛",
       "href": "history.html"
-    },
-    {
-      "label": "参会服务",
-      "href": "service.html"
     }
   ],
   "contact": {
